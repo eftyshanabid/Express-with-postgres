@@ -46,8 +46,6 @@ async function createTask(req,res){
   }
 }
 
-
-
 async function deleteTask(req, res) {
   try {
     const { id } = req.params;

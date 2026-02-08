@@ -1,4 +1,3 @@
-const { use } = require('react');
 const User = require('../models/User')
 
 async function createUser(req,res){
@@ -64,4 +63,34 @@ async function updateUser(req,res) {
     }
 }
 
-module.exports = {createUser,updateUser}
+async function deleteUser(req,res){
+   try{
+    const id = req.params;
+    const user = await User.findByPk(id);
+
+    if(!user)
+    {
+        return res.status(404).json({
+            error: 'user not found',
+            message : `user with ${id} do not exist`
+        })
+    }
+
+    await user.destroy();
+    res.status(200).json({
+        message : 'User has been deleted',
+        deletedUser : {
+            id : user.id,
+            name : user.name
+        }
+    })
+   }
+   catch(error){
+     res.status(500).json({
+        message : 'failed to delete user',
+        details : error
+     })
+   }
+}
+
+module.exports = {createUser,updateUser,deleteUser}
