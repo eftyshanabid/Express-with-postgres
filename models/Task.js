@@ -11,5 +11,8 @@ const Task = sequelize.define('Task',{
       allowNull:false }
 })
 
+Task.sync()
+  .then(() => console.log('Task table created successfully.'))
+  .catch((error) => console.error('Error creating table:', error));
 
 module.exports = Task;
