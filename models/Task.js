@@ -10,7 +10,6 @@ const Task = sequelize.define('Task',{
       type:Sequelize.DataTypes.STRING,
       allowNull:false }
 })
-
 Task.sync()
   .then(() => console.log('Task table created successfully.'))
   .catch((error) => console.error('Error creating table:', error));
