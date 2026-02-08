@@ -26,3 +26,6 @@ User.sync()
 }).catch((err)=>{
     console.log("unable to connect to the database",err);
 })
+
+module.exports = User
+ 
