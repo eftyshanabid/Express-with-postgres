@@ -1,4 +1,4 @@
-const { Task } = require("../config/database");
+const Task = require("../models/Task");
 
 async function createTask(req,res){
     try {
