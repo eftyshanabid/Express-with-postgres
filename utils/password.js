@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 function getRandomSalt(){
-    return crypto.randomBytes(8).toString('hex').slice(0,16);
+    return crypto.randomBytes(8).toString('hex');
 }
 
 function mix(password,salt){

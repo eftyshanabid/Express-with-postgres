@@ -1,11 +1,24 @@
-const User = require('../models/User')
+const User = require('../models/User');
+const {generate} = require('../utils/password');
+const {validationResult} = require('express-validator');
+
 
 async function createUser(req,res){
         try{
+                const errors = validationResult(req);
+                if(!errors.isEmpty()){
+                    return res.status(422).json({
+                        msg:"error in user input"
+                    })
+                }
+
                 const username = req.body.username;
-                const password = req.body.password;
                 const roll = req.body.roll;
                 const email = req.body.email;
+
+                const chunks = generate(passwordRaw);
+
+                const password = `${chunks.hash}.${chunks.salt}`;
 
                 const newUser = await User.create({username,password,roll,email})
 
@@ -99,33 +112,4 @@ async function deleteUser(req,res){
 }
 
 
-async function login(req,res){
-    try{
-        const username = req.body.username;
-        const password = req.body.password;
-        
-       const db_username = await User.findOne()
-
-       if((db_username == username) && (db_password == password)){
-        res.status(200).json({
-            msg : "login successful",
-            profile : {
-                username : username,
-                password : password
-            }
-        })
-       }
-       res.status(404).json({
-        msg : "user not found"
-       })
-    }
-    catch(error)
-    {   console.log(error);
-        res.status(500).json({
-            msg : "login not successful",
-            input: req.body
-        })
-    }
-}
-
-module.exports = {createUser,updateUser,deleteUser,login}
+module.exports = {createUser,updateUser,deleteUser}
