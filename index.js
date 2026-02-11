@@ -3,6 +3,7 @@ require('dotenv').config();
 const sequelize = require('./config/database');
 const taskRoutes = require('./routes/taskRoutes');
 const userRoutes = require('./routes/userRoutes');
+const auth = require('./auth');
 
 
 const app = express();
