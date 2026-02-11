@@ -2,8 +2,12 @@ const User = require('../models/User')
 
 async function createUser(req,res){
         try{
-                const {username,password,roll,email} = req.body;
-                const newUser = await User.create({username,password,roll,email});
+                const username = req.body.username;
+                const password = req.body.password;
+                const roll = req.body.roll;
+                const email = req.body.email;
+
+                const newUser = await User.create({username,password,roll,email})
 
                 res.status(200).json({
                         message: 'user created successfully',
@@ -21,7 +25,7 @@ async function createUser(req,res){
 
 async function updateUser(req,res) {
     try{
-        const {id} = req.params;
+        const id = req.params.id;
         const {username,password,roll,email} = req.body;
         
         if(!id){
@@ -64,8 +68,9 @@ async function updateUser(req,res) {
 }
 
 async function deleteUser(req,res){
+   
    try{
-    const id = req.params;
+    const id = req.params.id;
     const user = await User.findByPk(id);
 
     if(!user)
@@ -93,4 +98,34 @@ async function deleteUser(req,res){
    }
 }
 
-module.exports = {createUser,updateUser,deleteUser}
+
+async function login(req,res){
+    try{
+        const username = req.body.username;
+        const password = req.body.password;
+        
+       const db_username = await User.findOne()
+
+       if((db_username == username) && (db_password == password)){
+        res.status(200).json({
+            msg : "login successful",
+            profile : {
+                username : username,
+                password : password
+            }
+        })
+       }
+       res.status(404).json({
+        msg : "user not found"
+       })
+    }
+    catch(error)
+    {   console.log(error);
+        res.status(500).json({
+            msg : "login not successful",
+            input: req.body
+        })
+    }
+}
+
+module.exports = {createUser,updateUser,deleteUser,login}
