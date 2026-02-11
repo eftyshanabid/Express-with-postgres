@@ -2,7 +2,8 @@ const User = require('../models/User');
 const {generate} = require('../utils/password');
 const {validationResult} = require('express-validator');
 const {validate} = require('../utils/password');
-const {app_secret} = require('../utils/password');
+const {app_secret} = require('../config.json');
+ const jwt = require('jsonwebtoken');
 
 
 async function createUser(req,res){
@@ -10,7 +11,7 @@ async function createUser(req,res){
                 const errors = validationResult(req);
                 if(!errors.isEmpty()){
                     return res.status(422).json({
-                        msg:"error in user input"
+                       errors: errors.array()
                     })
                 }
 
@@ -18,7 +19,7 @@ async function createUser(req,res){
                 const roll = req.body.roll;
                 const email = req.body.email;
 
-                const chunks = generate(passwordRaw);
+                const chunks = generate(req.body.password);
 
                 const password = `${chunks.hash}.${chunks.salt}`;
 
@@ -134,19 +135,20 @@ async function login(req,res){
             return res.status(401).json({error: true, message: "User not found"});
         }
     
-        const [salt, hash] = user.password.split(".");
-        const {name, email: userEmail, id} = user;
+        const [hash, salt] = user.password.split(".");
+        const {name, email: userEmail, id,roll} = user;
         const valid = validate(password, hash, salt);
         
         if (valid) {
-            const token = jwt.sign({id, name, email: userEmail}, app_secret);
+            const token = jwt.sign({id, name, email: userEmail,roll}, app_secret);
             res.json({
                 error: false,
                 token,
                 user: {
                     id,
                     name,
-                    email: userEmail
+                    email: userEmail,
+                    roll
                 }
             });
         } else {

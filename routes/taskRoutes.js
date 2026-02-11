@@ -16,16 +16,9 @@ router.get('/api/health', (req, res) => {
 });
 
 router.post('/api/createtask', createTask);
-
 router.put('/api/tasks/:id', updateTask);
-
 router.delete('/api/tasks/:id', deleteTask);
-
-
-
 router.get('/api/gettasks',getAllTasks);
-
-
 router.get('/api/gettask/:id',getTaskById);
 
 module.exports = router;

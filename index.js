@@ -9,8 +9,10 @@ const auth = require('./auth');
 const app = express();
 app.use(express.json());
 
+app.use('/v1/api',auth);
 app.use('/v1', taskRoutes);
 app.use('/v1',userRoutes);
+
 
 const _port = Number(process.env.PORT);
 
